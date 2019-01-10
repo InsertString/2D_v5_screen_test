@@ -13,19 +13,61 @@
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
-	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
 
-		left_mtr = left;
-		right_mtr = right;
+
+//STATIC PROTOTYPES//
+static lv_res_t btn_rel_action(lv_obj_t * btn);
+
+
+
+
+int i;
+std::string i_text;
+
+
+
+
+void opcontrol() {
+
+	/********************
+  * CREATE A SCREEN
+  *******************/
+  /* Create a new screen and load it
+   * Screen can be created from any type object type*/
+	lv_obj_t * scr = lv_page_create(NULL, NULL);
+  lv_scr_load(scr);
+
+	//create label
+	lv_obj_t * label = lv_label_create(scr, NULL); /*First parameters (scr) is the parent*/
+  lv_label_set_text(label, "Hello World");  /*Set the text*/
+  lv_obj_set_x(label, 50);                        /*Set the x coordinate*/
+
+	//create button
+	lv_obj_t * btn1 = lv_btn_create(lv_scr_act(), NULL);
+	lv_btn_set_action(btn1, LV_BTN_ACTION_CLICK, btn_rel_action); /*Set function to be called when the button is released*/
+  lv_obj_align(btn1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);  /*Align below the label*/
+	label = lv_label_create(btn1, NULL);
+	lv_label_set_text(label, ". . .");
+
+	while (true) {
+
+
+
+
 		pros::delay(20);
 	}
+}
+
+
+
+/**
+ * Called when a button is released
+ * @param btn pointer to the released button
+ * @return LV_RES_OK because the object is not deleted in this function
+ */
+static  lv_res_t btn_rel_action(lv_obj_t * btn)
+{
+		i++;
+
+    return LV_RES_OK;
 }

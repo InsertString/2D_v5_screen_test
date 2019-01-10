@@ -35,7 +35,8 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
-
+#include "display/lvgl.h"
+#include "sys/string.h"
 /**
  * You should add more #includes here
  */
